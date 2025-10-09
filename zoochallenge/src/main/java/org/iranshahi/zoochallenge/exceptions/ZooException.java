@@ -4,7 +4,11 @@ import lombok.Getter;
 
 
 /**
- * Base class for all domain-specific exceptions in the Zoo challenge app.
+ * Base class for all domain-specific exceptions in the Zoo challenge app .
+ * <p>
+ * This abstract class serves as the parent of all custom exceptions thrown
+ * by business and domain layers (e.g., {@link AnimalNotFoundException}, {@link RoomNotFoundException}).
+ * <p>
  * It carries a semantic {@code errorCode} field that can be used to uniquely
  * identify the type of business error in logs, telemetry systems, or API responses.
  * <p>
@@ -16,7 +20,8 @@ import lombok.Getter;
  * @since 9 Oct 2025
  */
 
-public class ZooException extends RuntimeException {
+public sealed class ZooException extends RuntimeException
+        permits AnimalNotFoundException, RoomNotFoundException,DuplicateRoomTitleException {
 
     @Getter
     private final String errorCode;

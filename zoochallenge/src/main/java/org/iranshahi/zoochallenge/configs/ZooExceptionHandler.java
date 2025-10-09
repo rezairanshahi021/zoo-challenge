@@ -1,6 +1,7 @@
 package org.iranshahi.zoochallenge.configs;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.iranshahi.zoochallenge.exceptions.DuplicateRoomTitleException;
 import org.iranshahi.zoochallenge.exceptions.ZooException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -11,6 +12,7 @@ import org.springframework.web.context.request.WebRequest;
 
 import java.net.URI;
 import java.time.Instant;
+import java.util.Map;
 
 
 /**
@@ -65,6 +67,11 @@ public class ZooExceptionHandler {
         return ResponseEntity.status(problem.getStatus()).body(problem);
     }
 
+
+    @ExceptionHandler(DuplicateRoomTitleException.class)
+    public ResponseEntity<?> handleDuplicate(DuplicateRoomTitleException ex) {
+        return ResponseEntity.status(409).body(Map.of("error", ex.getMessage()));
+    }
 
     /**
      * Fallback handler for all unexpected exceptions.

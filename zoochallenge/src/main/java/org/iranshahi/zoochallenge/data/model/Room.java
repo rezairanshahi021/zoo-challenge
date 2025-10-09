@@ -1,6 +1,9 @@
 package org.iranshahi.zoochallenge.data.model;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -40,8 +43,6 @@ import java.time.Instant;
  * @since 9 Oct 2025
  */
 @Document(collection = "rooms")
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
 @Getter
 @Setter
