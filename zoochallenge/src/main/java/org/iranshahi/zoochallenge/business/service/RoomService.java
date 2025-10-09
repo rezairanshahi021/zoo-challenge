@@ -2,6 +2,7 @@ package org.iranshahi.zoochallenge.business.service;
 
 
 import org.iranshahi.zoochallenge.business.dto.RoomDto;
+import org.iranshahi.zoochallenge.exceptions.DuplicateRoomTitleException;
 import org.iranshahi.zoochallenge.exceptions.RoomNotFoundException;
 
 /**
@@ -19,6 +20,7 @@ public interface RoomService {
      *
      * @param roomDto the new room data {@link RoomDto}, <tt>this object is contains room title</tt>
      * @return saved room object {@link RoomDto} contains id, and title
+     * @throws DuplicateRoomTitleException if there is an exist room with the same title it throws
      */
     RoomDto create(RoomDto roomDto);
 
@@ -28,10 +30,11 @@ public interface RoomService {
      * @param roomId  the exists room id
      * @param roomDto @link RoomDto} new title of the room
      * @return updated room data {@link RoomDto} contains id, and title
-     * @throws RoomNotFoundException if there isn't a room with the roomId it will throw
+     * @throws RoomNotFoundException       if there isn't a room with the roomId it will throw
+     * @throws DuplicateRoomTitleException if there is an exist room with the same title it throws
      *
      */
-    RoomDto update(String roomId, RoomDto roomDto) throws RoomNotFoundException;
+    RoomDto update(String roomId, RoomDto roomDto) throws RoomNotFoundException, DuplicateRoomTitleException;
 
     /**
      * gets an exists room by id

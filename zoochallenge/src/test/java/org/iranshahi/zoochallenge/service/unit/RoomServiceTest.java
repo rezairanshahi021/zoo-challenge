@@ -91,7 +91,7 @@ public class RoomServiceTest {
     }
 
     @Test
-    void update_room_notFound_throws() {
+    void update_not_existing_room() {
         when(roomRepository.findById("r99")).thenReturn(Optional.empty());
         assertThrows(RoomNotFoundException.class, () -> roomService.update("r99", new RoomDto(null, null)));
     }

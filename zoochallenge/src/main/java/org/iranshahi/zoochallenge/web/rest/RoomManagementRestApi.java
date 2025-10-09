@@ -17,7 +17,7 @@ import java.net.URI;
 @RestController
 @RequestMapping("/api/rooms")
 @RequiredArgsConstructor
-public class RoomRestApi {
+public class RoomManagementRestApi {
     private final RoomService roomService;
 
 
