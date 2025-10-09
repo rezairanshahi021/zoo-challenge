@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration>
+
+<configuration scan="true">
+  <!-- Spring Boot defaults (colors, patterns, vars) -->
+  <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+  <!-- Patterns -->
+  <property name="CONSOLE_LOG_PATTERN" value="${CONSOLE_LOG_PATTERN:-%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd'T'HH:mm:ss.SSSXXX}}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %crlf(%m){red} %n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
+  <property name="FILE_LOG_PATTERN" value="${FILE_LOG_PATTERN:-%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd'T'HH:mm:ss.SSSXXX}} ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } --- [%t] %-40.40logger{39} : %crlf(%m) %n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
+
+  <!-- Set log file location here -->
+  <property name="LOG_FILE" value="logs/app.log"/>
+
+  <!-- Optional rolling settings -->
+  <property name="ROLLING_FILE_NAME_PATTERN" value="${LOG_FILE}.%d{yyyy-MM-dd}.%i.gz"/>
+  <property name="LOG_FILE_MAX_SIZE" value="50MB"/>
+  <property name="LOG_TOTAL_SIZE_CAP" value="5GB"/>
+  <property name="LOG_MAX_HISTORY" value="30"/>
+
+  <!-- Appenders -->
+  <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+  <include resource="org/springframework/boot/logging/logback/file-appender.xml"/>
+
+  <!-- Your loggers -->
+  <logger name="org.iranshahi.zoochallenge" level="INFO"/>
+  <logger name="jakarta.activation" level="WARN"/>
+  <logger name="jakarta.management.remote" level="WARN"/>
+  <logger name="jakarta.xml.bind" level="WARN"/>
+  <logger name="jdk.event.security" level="INFO"/>
+  <logger name="com.sun" level="WARN"/>
+  <logger name="com.zaxxer" level="WARN"/>
+  <logger name="io.undertow" level="WARN"/>
+  <logger name="io.undertow.websockets.jsr" level="ERROR"/>
+  <logger name="org.apache.catalina.startup.DigesterFactory" level="OFF"/>
+  <logger name="org.bson" level="WARN"/>
+  <logger name="org.hibernate.validator" level="WARN"/>
+  <logger name="org.hibernate" level="WARN"/>
+  <logger name="org.hibernate.ejb.HibernatePersistence" level="OFF"/>
+  <logger name="org.springframework" level="WARN"/>
+  <logger name="org.springframework.web" level="WARN"/>
+  <logger name="org.springframework.security" level="WARN"/>
+  <logger name="org.springframework.boot.autoconfigure.logging" level="INFO"/>
+<!--  <logger name="org.springframework.cache" level="WARN"/>-->
+  <logger name="io.swagger.v3" level="INFO"/>
+  <logger name="sun.rmi" level="WARN"/>
+  <logger name="sun.rmi.transport" level="WARN"/>
+  <logger name="Validator" level="INFO"/>
+  <logger name="_org.springframework.web.servlet.HandlerMapping.Mappings" level="INFO"/>
+
+
+  <!-- Root -->
+  <springProperty name="log.level" source="logging.level.root" defaultValue="INFO" />
+  <root level="${log.level}">
+    <appender-ref ref="CONSOLE"/>
+    <appender-ref ref="FILE"/>
+  </root>
+
+  <!-- Silence logback’s own status -->
+  <statusListener class="ch.qos.logback.core.status.NopStatusListener"/>
+  <!-- Reset JUL -->
+  <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+    <resetJUL>true</resetJUL>
+  </contextListener>
+</configuration>
