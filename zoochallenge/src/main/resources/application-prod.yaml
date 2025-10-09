@@ -2,6 +2,9 @@ server:
   port: 8080
 
 spring:
+  docker:
+    compose:
+      enabled: false
   data:
     mongodb:
       uri: ${MONGODB_URI}

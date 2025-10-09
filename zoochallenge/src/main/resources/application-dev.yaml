@@ -2,6 +2,17 @@ server:
   port: 8080
 
 spring:
+  docker:
+    compose:
+      enabled: true
+      file: ./docker-compose.yml
+      start:
+        command: up
+        wait: true
+      stop:
+        command: down
+      lifecycle-management: start_and_stop
+
   data:
     mongodb:
       uri: mongodb://mongo:27017/zoo
