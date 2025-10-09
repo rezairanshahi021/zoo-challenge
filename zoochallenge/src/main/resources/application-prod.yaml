@@ -4,7 +4,7 @@ server:
 spring:
   data:
     mongodb:
-      uri: mongodb://mongo:27017/zoo
+      uri: ${MONGODB_URI}
   jackson:
     serialization:
       write-dates-as-timestamps: false
