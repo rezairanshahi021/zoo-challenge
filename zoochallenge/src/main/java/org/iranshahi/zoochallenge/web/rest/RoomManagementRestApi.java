@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.iranshahi.zoochallenge.business.dto.FavouriteRoomDto;
 import org.iranshahi.zoochallenge.business.dto.RoomDto;
 import org.iranshahi.zoochallenge.business.service.FavouriteRoomReportingService;
-import org.iranshahi.zoochallenge.business.service.RoomService;
+import org.iranshahi.zoochallenge.business.service.RoomManagementService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +21,7 @@ import java.util.List;
 @RequestMapping("/api/rooms")
 @RequiredArgsConstructor
 public class RoomManagementRestApi {
-    private final RoomService roomService;
+    private final RoomManagementService roomService;
     private final FavouriteRoomReportingService reportingService;
 
 

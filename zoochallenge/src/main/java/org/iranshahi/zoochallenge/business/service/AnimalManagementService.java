@@ -2,6 +2,8 @@ package org.iranshahi.zoochallenge.business.service;
 
 import org.iranshahi.zoochallenge.business.dto.AnimalDto;
 import org.iranshahi.zoochallenge.exceptions.AnimalNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * Exposes all required functionality to manage {@code Animal}
@@ -10,7 +12,7 @@ import org.iranshahi.zoochallenge.exceptions.AnimalNotFoundException;
  * @since 9 Oct 2025
  *
  */
-public interface AnimalService {
+public interface AnimalManagementService {
 
 
     /**
@@ -48,4 +50,15 @@ public interface AnimalService {
      * @throws AnimalNotFoundException if animal not exists with the id it will throw
      */
     void delete(String animalId);
+
+
+    /**
+     *
+     * gets all animals that are living in a specific room
+     *
+     * @param roomId   the ID of room {@code String}
+     * @param pageable handles page size and number and sorting concerns {@link Pageable}
+     * @return list of animals in the room by page
+     */
+    Page<AnimalDto> getAnimalsInRoom(String roomId, Pageable pageable);
 }

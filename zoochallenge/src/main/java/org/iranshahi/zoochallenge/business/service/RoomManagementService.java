@@ -12,7 +12,7 @@ import org.iranshahi.zoochallenge.exceptions.RoomNotFoundException;
  * @since 9 Oct 2025
  *
  */
-public interface RoomService {
+public interface RoomManagementService {
 
 
     /**

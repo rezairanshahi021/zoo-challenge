@@ -2,6 +2,7 @@ package org.iranshahi.zoochallenge.business.mapper;
 
 import org.iranshahi.zoochallenge.business.dto.AnimalDto;
 import org.iranshahi.zoochallenge.data.model.Animal;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -20,6 +21,10 @@ public class AnimalMapper {
                 animal.getLocated(),
                 animal.getRoomId(),
                 animal.getFavouriteRoomIds());
+    }
+
+    public Page<AnimalDto> toDtoPage(Page<Animal> animals) {
+        return animals.map(this::toDto);
     }
 
 }

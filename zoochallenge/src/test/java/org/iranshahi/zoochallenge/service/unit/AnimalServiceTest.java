@@ -2,7 +2,7 @@ package org.iranshahi.zoochallenge.service.unit;
 
 import org.iranshahi.zoochallenge.business.dto.AnimalDto;
 import org.iranshahi.zoochallenge.business.mapper.AnimalMapper;
-import org.iranshahi.zoochallenge.business.service.AnimalService;
+import org.iranshahi.zoochallenge.business.service.AnimalManagementService;
 import org.iranshahi.zoochallenge.business.service.impl.AnimalServiceImpl;
 import org.iranshahi.zoochallenge.data.model.Animal;
 import org.iranshahi.zoochallenge.data.repository.AnimalRepository;
@@ -24,7 +24,7 @@ public class AnimalServiceTest {
     private AnimalRepository animalRepository;
     private AnimalMapper animalMapper;
     private RoomRepository roomRepository;
-    private AnimalService animalService;
+    private AnimalManagementService animalService;
 
     @BeforeEach
     void setUp() {

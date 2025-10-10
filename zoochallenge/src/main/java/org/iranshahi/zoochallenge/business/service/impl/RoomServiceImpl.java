@@ -3,7 +3,7 @@ package org.iranshahi.zoochallenge.business.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.iranshahi.zoochallenge.business.dto.RoomDto;
 import org.iranshahi.zoochallenge.business.mapper.RoomMapper;
-import org.iranshahi.zoochallenge.business.service.RoomService;
+import org.iranshahi.zoochallenge.business.service.RoomManagementService;
 import org.iranshahi.zoochallenge.data.model.Room;
 import org.iranshahi.zoochallenge.data.repository.RoomRepository;
 import org.iranshahi.zoochallenge.exceptions.DuplicateRoomTitleException;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
-public class RoomServiceImpl implements RoomService {
+public class RoomServiceImpl implements RoomManagementService {
 
     private final RoomRepository roomRepository;
     private final RoomMapper roomMapper;

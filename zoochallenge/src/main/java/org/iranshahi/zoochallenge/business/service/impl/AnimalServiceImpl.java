@@ -5,18 +5,20 @@ import org.iranshahi.zoochallenge.business.dto.AnimalDto;
 import org.iranshahi.zoochallenge.business.mapper.AnimalMapper;
 import org.iranshahi.zoochallenge.business.service.AnimalFavouriteRoomManagementService;
 import org.iranshahi.zoochallenge.business.service.AnimalPlacementService;
-import org.iranshahi.zoochallenge.business.service.AnimalService;
+import org.iranshahi.zoochallenge.business.service.AnimalManagementService;
 import org.iranshahi.zoochallenge.data.model.Animal;
 import org.iranshahi.zoochallenge.data.model.Room;
 import org.iranshahi.zoochallenge.data.repository.AnimalRepository;
 import org.iranshahi.zoochallenge.data.repository.RoomRepository;
 import org.iranshahi.zoochallenge.exceptions.AnimalNotFoundException;
 import org.iranshahi.zoochallenge.exceptions.RoomNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class AnimalServiceImpl implements AnimalService, AnimalPlacementService, AnimalFavouriteRoomManagementService {
+public class AnimalServiceImpl implements AnimalManagementService, AnimalPlacementService, AnimalFavouriteRoomManagementService {
     private final AnimalRepository animalRepository;
     private final AnimalMapper animalMapper;
     private final RoomRepository roomRepository;
@@ -96,5 +98,10 @@ public class AnimalServiceImpl implements AnimalService, AnimalPlacementService,
         animal.getFavouriteRoomIds().remove(roomId);
         animal = animalRepository.save(animal);
         return animalMapper.toDto(animal);
+    }
+
+    public Page<AnimalDto> getAnimalsInRoom(String roomId, Pageable pageable) {
+        var animalsInRoom = animalRepository.findByRoomId(roomId, pageable);
+        return animalMapper.toDtoPage(animalsInRoom);
     }
 }

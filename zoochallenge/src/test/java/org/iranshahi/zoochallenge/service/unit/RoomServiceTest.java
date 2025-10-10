@@ -2,7 +2,7 @@ package org.iranshahi.zoochallenge.service.unit;
 
 import org.iranshahi.zoochallenge.business.dto.RoomDto;
 import org.iranshahi.zoochallenge.business.mapper.RoomMapper;
-import org.iranshahi.zoochallenge.business.service.RoomService;
+import org.iranshahi.zoochallenge.business.service.RoomManagementService;
 import org.iranshahi.zoochallenge.business.service.impl.RoomServiceImpl;
 import org.iranshahi.zoochallenge.data.model.Room;
 import org.iranshahi.zoochallenge.data.repository.RoomRepository;
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.*;
 
 public class RoomServiceTest {
 
-    private RoomService roomService;
+    private RoomManagementService roomService;
     private RoomRepository roomRepository;
     private RoomMapper roomMapper;
 
