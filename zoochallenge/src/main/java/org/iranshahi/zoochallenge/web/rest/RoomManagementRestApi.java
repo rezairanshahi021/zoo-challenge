@@ -1,12 +1,15 @@
 package org.iranshahi.zoochallenge.web.rest;
 
 import lombok.RequiredArgsConstructor;
+import org.iranshahi.zoochallenge.business.dto.FavouriteRoomDto;
 import org.iranshahi.zoochallenge.business.dto.RoomDto;
+import org.iranshahi.zoochallenge.business.service.FavouriteRoomReportingService;
 import org.iranshahi.zoochallenge.business.service.RoomService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 /**
  *
@@ -19,6 +22,7 @@ import java.net.URI;
 @RequiredArgsConstructor
 public class RoomManagementRestApi {
     private final RoomService roomService;
+    private final FavouriteRoomReportingService reportingService;
 
 
     @PostMapping
@@ -45,5 +49,9 @@ public class RoomManagementRestApi {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/favourites")
+    public ResponseEntity<List<FavouriteRoomDto>> favourites() {
+        return ResponseEntity.ok(reportingService.listFavouriteRooms());
+    }
 
 }
