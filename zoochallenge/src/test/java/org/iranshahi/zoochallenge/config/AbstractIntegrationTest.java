@@ -5,10 +5,6 @@ import org.junit.jupiter.api.TestInstance;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.MongoDBContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.utility.DockerImageName;
 
 /**
  * Base class for all integration tests.
@@ -17,25 +13,20 @@ import org.testcontainers.utility.DockerImageName;
  * @author Reza Iranshahi
  * @since 10 Oct 2025
  */
-@Testcontainers
-@SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@SpringBootTest
 public abstract class AbstractIntegrationTest {
 
-    @Container
-    static final MongoDBContainer mongo = new MongoDBContainer(DockerImageName.parse("mongo:6.0.8"))
-            .withReuse(true);
+    private static final MongoTestContainer mongo = MongoTestContainer.getInstance();
 
-
-    static {
-        if (!mongo.isRunning()) {
-            mongo.start();
-        }
+    @BeforeAll
+    static void setup() {
+        // در اینجا اطمینان حاصل می‌کنیم که mongo فقط یک بار استارت شود
+        System.out.println("🔗 Using MongoDB container at: " + mongo.getReplicaSetUrl());
     }
 
-
     @DynamicPropertySource
-    static void setMongoProperties(DynamicPropertyRegistry registry) {
+    static void mongoProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.data.mongodb.uri", mongo::getReplicaSetUrl);
     }
 }
