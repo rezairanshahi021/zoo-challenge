@@ -1,4 +1,8 @@
 package org.iranshahi.zoochallenge.business.dto;
 
-public record AnimalPlacementDto(String roomId) {
+import jakarta.validation.constraints.NotNull;
+
+public record AnimalPlacementDto(
+        @NotNull
+        String roomId) {
 }

@@ -1,5 +1,6 @@
 package org.iranshahi.zoochallenge.web.rest;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.iranshahi.zoochallenge.business.dto.FavouriteRoomDto;
 import org.iranshahi.zoochallenge.business.dto.RoomDto;
@@ -26,7 +27,7 @@ public class RoomManagementRestApi {
 
 
     @PostMapping
-    public ResponseEntity<RoomDto> create(@RequestBody RoomDto roomDto) {
+    public ResponseEntity<RoomDto> create(@Valid @RequestBody RoomDto roomDto) {
         var created = roomService.create(roomDto);
         return ResponseEntity.created(URI.create("/api/rooms/" + created.id())).body(created);
     }

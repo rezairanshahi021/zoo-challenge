@@ -6,12 +6,15 @@ import org.iranshahi.zoochallenge.exceptions.ZooException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
 import java.net.URI;
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -60,7 +63,7 @@ public class ZooExceptionHandler {
     public ResponseEntity<ProblemDetail> handleZooExceptions(ZooException ex, WebRequest req) {
         var problem = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
         problem.setTitle(ex.getClass().getSimpleName());
-        problem.setType(URI.create("https://zoo.example.com/errors/" + ex.getErrorCode().toLowerCase()));
+        problem.setType(URI.create("https://zoo.org/errors/" + ex.getErrorCode().toLowerCase()));
         problem.setDetail(ex.getMessage());
         problem.setProperty("timestamp", Instant.now());
         problem.setProperty("errorCode", ex.getErrorCode());
@@ -87,11 +90,43 @@ public class ZooExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ProblemDetail> handleGeneric(Exception ex, HttpServletRequest req) {
         var pd = ProblemDetail.forStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-        pd.setType(URI.create("https://zoo.example.com/errors/internal"));
+        pd.setType(URI.create("https://zoo.org/errors/internal"));
         pd.setTitle("Internal error");
         pd.setDetail(ex.getMessage());
         pd.setProperty("path", req.getRequestURI());
         pd.setProperty("timestamp", Instant.now());
         return ResponseEntity.status(pd.getStatus()).body(pd);
     }
+
+
+    /**
+     * Handles validation errors (e.g. @NotBlank, @NotNull)
+     * and converts them to the project’s ProblemDetail format.
+     *
+     * @param ex  {@link MethodArgumentNotValidException} all api validation will wrap in this type
+     * @param req {@link HttpServletRequest} servlet object
+     * @return a standardized {@link ProblemDetail} response body.
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ProblemDetail> handleValidationErrors(
+            MethodArgumentNotValidException ex,
+            HttpServletRequest req
+    ) {
+        var pd = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
+        pd.setType(URI.create("https://zoo.org/errors/validation-failed"));
+        pd.setTitle("Validation failed");
+        pd.setDetail("Request validation failed for one or more fields.");
+        pd.setProperty("path", req.getRequestURI());
+        pd.setProperty("timestamp", Instant.now());
+
+        Map<String, String> fieldErrors = new HashMap<>();
+        for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
+            fieldErrors.put(fieldError.getField(), fieldError.getDefaultMessage());
+        }
+        pd.setProperty("errors", fieldErrors);
+
+        return ResponseEntity.status(pd.getStatus()).body(pd);
+    }
+
+
 }

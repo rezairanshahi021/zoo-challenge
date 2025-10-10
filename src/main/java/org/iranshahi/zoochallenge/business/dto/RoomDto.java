@@ -1,6 +1,9 @@
 package org.iranshahi.zoochallenge.business.dto;
 
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 /**
  * {@code Room DTO} is using to carries Room data from/to resource layer and business layer.
  *
@@ -14,5 +17,7 @@ package org.iranshahi.zoochallenge.business.dto;
  *
  */
 public record RoomDto(String id,
+                      @NotBlank(message = "Title must not be empty")
+                      @Size(min = 2, max = 50, message = "Title length must be between 2 and 50 characters")
                       String title) {
 }
