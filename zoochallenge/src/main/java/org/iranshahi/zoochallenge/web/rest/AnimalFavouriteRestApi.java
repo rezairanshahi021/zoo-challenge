@@ -14,7 +14,7 @@ public class AnimalFavouriteRestApi {
 
     private final AnimalFavouriteRoomManagementService animalFavouriteRoomManagementService;
 
-    @PostMapping("/{roomId}")
+    @PostMapping()
     public ResponseEntity<AnimalDto> addFav(@PathVariable("animal-id") String id, @RequestBody AnimalFavouriteRoomDto dto) {
         return ResponseEntity.ok(animalFavouriteRoomManagementService.addFavouriteRoom(id, dto.roomId()));
     }

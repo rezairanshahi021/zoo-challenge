@@ -18,8 +18,8 @@ public class AnimalManagementRestApi {
     private final AnimalManagementService animalService;
 
     @PostMapping
-    public ResponseEntity<AnimalDto> create(@RequestBody AnimalDto a) {
-        var created = animalService.create(a);
+    public ResponseEntity<AnimalDto> create(@RequestBody AnimalDto dto) {
+        var created = animalService.create(dto);
         return ResponseEntity.created(URI.create("/api/animals/" + created.id())).body(created);
     }
 
@@ -29,8 +29,8 @@ public class AnimalManagementRestApi {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AnimalDto> update(@PathVariable String id, @RequestBody AnimalDto a) {
-        return ResponseEntity.ok(animalService.update(id, a));
+    public ResponseEntity<AnimalDto> update(@PathVariable String id, @RequestBody AnimalDto dto) {
+        return ResponseEntity.ok(animalService.update(id, dto));
     }
 
     @DeleteMapping("/{id}")
