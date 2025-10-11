@@ -1,7 +1,8 @@
-package org.iranshahi.zoochallenge.rest.api.integration;
+package org.iranshahi.zoochallenge.integration;
 
 import org.iranshahi.zoochallenge.config.AbstractIntegrationTest;
 import org.iranshahi.zoochallenge.data.model.Animal;
+import org.iranshahi.zoochallenge.data.model.Category;
 import org.iranshahi.zoochallenge.data.model.Room;
 import org.iranshahi.zoochallenge.data.repository.AnimalRepository;
 import org.iranshahi.zoochallenge.data.repository.RoomRepository;
@@ -25,30 +26,39 @@ public class AnimalManagementRestApiTest extends AbstractIntegrationTest {
     @Autowired
     MockMvc mockMvc;
     @Autowired
-    RoomRepository roomRepo;
+    RoomRepository roomRepository;
     @Autowired
-    AnimalRepository animalRepo;
+    AnimalRepository animalRepository;
 
     @BeforeEach
     void setup() {
-        animalRepo.deleteAll();
-        roomRepo.deleteAll();
+        animalRepository.deleteAll();
+        roomRepository.deleteAll();
     }
 
     @Test
     void get_list_of_animals() throws Exception {
-        var room = roomRepo.save(Room.builder().title("Jungle").build());
-        var roomId = room.getId();
 
-        animalRepo.save(Animal.builder()
+        var room = Room.builder()
+                .title("Jungle")
+                .usedVolume(20.0)
+                .capacity(50.0)
+                .allowedCategory(Category.WILD)
+                .build();
+        room = roomRepository.save(room);
+
+        var animal = Animal.builder()
                 .title("Lion")
-                .roomId(roomId)
+                .roomId(room.getId())
+                .volume(10.0)
+                .category(Category.WILD)
                 .located(LocalDate.now())
-                .build());
+                .build();
+         animalRepository.save(animal);
 
-        mockMvc.perform(get("/api/animals/by-room/{roomId}", roomId))
+        mockMvc.perform(get("/api/animals/by-room/{roomId}", room.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content[0].title").value("Lion"))
-                .andExpect(jsonPath("$.content[0].roomId").value(roomId));
+                .andExpect(jsonPath("$.content[0].roomId").value(room.getId()));
     }
 }

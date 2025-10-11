@@ -10,7 +10,7 @@ package org.iranshahi.zoochallenge.exceptions;
  * @since 9 Oct 2025
  */
 
-public final class DuplicateRoomTitleException extends ZooException {
+public final class DuplicateRoomTitleException extends ZooBusinessException {
     public DuplicateRoomTitleException(String title) {
         super("Room with title %s is already exists".formatted(title), ExceptionCode.ROOM_IS_EXISTS);
     }

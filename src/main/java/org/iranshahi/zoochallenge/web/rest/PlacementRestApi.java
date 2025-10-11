@@ -2,19 +2,19 @@ package org.iranshahi.zoochallenge.web.rest;
 
 import lombok.RequiredArgsConstructor;
 import org.iranshahi.zoochallenge.business.dto.AnimalDto;
-import org.iranshahi.zoochallenge.business.dto.AnimalPlacementDto;
-import org.iranshahi.zoochallenge.business.service.AnimalPlacementService;
+import org.iranshahi.zoochallenge.business.dto.PlacementDto;
+import org.iranshahi.zoochallenge.business.service.PlacementService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/animals/{animal-id}/placement")
 @RequiredArgsConstructor
-public class AnimalPlacementRestApi {
-    private final AnimalPlacementService animalPlacementService;
+public class PlacementRestApi {
+    private final PlacementService animalPlacementService;
 
     @PatchMapping
-    public ResponseEntity<AnimalDto> place(@PathVariable("animal-id") String id, @RequestBody AnimalPlacementDto placementDto) {
+    public ResponseEntity<AnimalDto> place(@PathVariable("animal-id") String id, @RequestBody PlacementDto placementDto) {
         return ResponseEntity.ok(animalPlacementService.place(id, placementDto.roomId()));
     }
 

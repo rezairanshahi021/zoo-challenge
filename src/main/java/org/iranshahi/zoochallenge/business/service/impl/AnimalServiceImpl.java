@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.iranshahi.zoochallenge.business.dto.AnimalDto;
 import org.iranshahi.zoochallenge.business.mapper.AnimalMapper;
 import org.iranshahi.zoochallenge.business.service.AnimalFavouriteRoomManagementService;
-import org.iranshahi.zoochallenge.business.service.AnimalPlacementService;
 import org.iranshahi.zoochallenge.business.service.AnimalManagementService;
 import org.iranshahi.zoochallenge.data.model.Animal;
 import org.iranshahi.zoochallenge.data.model.Room;
@@ -18,7 +17,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class AnimalServiceImpl implements AnimalManagementService, AnimalPlacementService, AnimalFavouriteRoomManagementService {
+public class AnimalServiceImpl implements AnimalManagementService, AnimalFavouriteRoomManagementService {
     private final AnimalRepository animalRepository;
     private final AnimalMapper animalMapper;
     private final RoomRepository roomRepository;
@@ -60,23 +59,6 @@ public class AnimalServiceImpl implements AnimalManagementService, AnimalPlaceme
         }
     }
 
-
-    @Override
-    public AnimalDto place(String animalId, String roomId) {
-        var room = findRoomById(roomId);
-        var animal = findAnimalById(animalId);
-        animal.setRoomId(room.getId());
-        animal = animalRepository.save(animal);
-        return animalMapper.toDto(animal);
-    }
-
-    @Override
-    public AnimalDto remove(String animalId) {
-        var animal = findAnimalById(animalId);
-        animal.setRoomId(null);
-        animal = animalRepository.save(animal);
-        return animalMapper.toDto(animal);
-    }
 
     private Room findRoomById(String roomId) {
         return roomRepository.findById(roomId).orElseThrow(() -> new RoomNotFoundException(roomId));

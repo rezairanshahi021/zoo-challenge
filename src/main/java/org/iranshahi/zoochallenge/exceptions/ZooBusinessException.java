@@ -20,13 +20,21 @@ import lombok.Getter;
  * @since 9 Oct 2025
  */
 
-public sealed class ZooException extends RuntimeException
-        permits AnimalNotFoundException, RoomNotFoundException,DuplicateRoomTitleException {
+public sealed class ZooBusinessException extends RuntimeException
+        permits AnimalNotFoundException,
+        RoomNotFoundException,
+        DuplicateRoomTitleException,
+        CategoryMismatchException,
+        RoomOutOfSpaceException,
+        ConcurrencyException,
+        AnimalNotPlacedException
+
+{
 
     @Getter
     private final String errorCode;
 
-    public ZooException(String message, ExceptionCode exceptionCode) {
+    public ZooBusinessException(String message, ExceptionCode exceptionCode) {
         super(message);
         this.errorCode = exceptionCode.name();
     }

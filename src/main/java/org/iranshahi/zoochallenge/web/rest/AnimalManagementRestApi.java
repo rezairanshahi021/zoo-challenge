@@ -39,16 +39,17 @@ public class AnimalManagementRestApi {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/by-room/{roomId}")
+    @GetMapping("/by-room/{id}")
     public ResponseEntity<Page<AnimalDto>> animalsInRoom(
-            @PathVariable String roomId,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size,
-            @RequestParam(defaultValue = "title") String sort,
-            @RequestParam(defaultValue = "asc") String order) {
+            @PathVariable(name = "id") String roomId,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "20") int size,
+            @RequestParam(name = "sort", defaultValue = "title") String sort,
+            @RequestParam(name = "order", defaultValue = "desc") String order) {
 
         var dir = "desc".equalsIgnoreCase(order) ? Sort.Direction.DESC : Sort.Direction.ASC;
         var pageable = PageRequest.of(page, size, Sort.by(dir, sort));
-        return ResponseEntity.ok(animalService.getAnimalsInRoom(roomId, pageable));
+        var response = animalService.getAnimalsInRoom(roomId, pageable);
+        return ResponseEntity.ok(response);
     }
 }

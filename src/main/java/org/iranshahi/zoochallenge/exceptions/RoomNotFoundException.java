@@ -17,7 +17,7 @@ package org.iranshahi.zoochallenge.exceptions;
  * @since 9 Oct 2025
  */
 
-public final class RoomNotFoundException extends ZooException {
+public final class RoomNotFoundException extends ZooBusinessException {
     public RoomNotFoundException(String id) {
         super("Room with id %s not found".formatted(id), ExceptionCode.ROOM_NOT_FOUND);
     }

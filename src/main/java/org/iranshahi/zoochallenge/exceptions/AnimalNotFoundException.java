@@ -16,7 +16,7 @@ package org.iranshahi.zoochallenge.exceptions;
  * @version 1.0.0
  * @since 9 Oct 2025
  */
-public final class AnimalNotFoundException extends ZooException {
+public final class AnimalNotFoundException extends ZooBusinessException {
     public AnimalNotFoundException(String id) {
         super("Animal with id %s not found".formatted(id), ExceptionCode.ANIMAL_NOT_FOUND);
     }

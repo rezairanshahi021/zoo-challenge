@@ -2,7 +2,7 @@ package org.iranshahi.zoochallenge.configs;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.iranshahi.zoochallenge.exceptions.DuplicateRoomTitleException;
-import org.iranshahi.zoochallenge.exceptions.ZooException;
+import org.iranshahi.zoochallenge.exceptions.ZooBusinessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +42,7 @@ import java.util.Map;
  *
  * @author Reza Iranshahi
  * @version 1.0.0
- * @see ZooException
+ * @see ZooBusinessException
  * @since 9 Oct 2025
  */
 
@@ -50,7 +50,7 @@ import java.util.Map;
 public class ZooExceptionHandler {
 
     /**
-     * Handles all domain-level exceptions derived from {@link ZooException}.
+     * Handles all domain-level exceptions derived from {@link ZooBusinessException}.
      *
      * <p>Returns HTTP 400 (Bad Request) by default, unless overridden by a
      * more specific handler.
@@ -59,8 +59,8 @@ public class ZooExceptionHandler {
      * @param req the current web request.
      * @return a standardized {@link ProblemDetail} response body.
      */
-    @ExceptionHandler(ZooException.class)
-    public ResponseEntity<ProblemDetail> handleZooExceptions(ZooException ex, WebRequest req) {
+    @ExceptionHandler(ZooBusinessException.class)
+    public ResponseEntity<ProblemDetail> handleZooExceptions(ZooBusinessException ex, WebRequest req) {
         var problem = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
         problem.setTitle(ex.getClass().getSimpleName());
         problem.setType(URI.create("https://zoo.org/errors/" + ex.getErrorCode().toLowerCase()));

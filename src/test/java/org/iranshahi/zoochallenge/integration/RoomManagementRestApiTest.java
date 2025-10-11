@@ -1,4 +1,4 @@
-package org.iranshahi.zoochallenge.rest.api.integration;
+package org.iranshahi.zoochallenge.integration;
 
 import org.iranshahi.zoochallenge.config.AbstractIntegrationTest;
 import org.iranshahi.zoochallenge.data.model.Animal;

@@ -4,6 +4,7 @@ import org.iranshahi.zoochallenge.business.dto.RoomDto;
 import org.iranshahi.zoochallenge.business.mapper.RoomMapper;
 import org.iranshahi.zoochallenge.business.service.RoomManagementService;
 import org.iranshahi.zoochallenge.business.service.impl.RoomServiceImpl;
+import org.iranshahi.zoochallenge.data.model.Category;
 import org.iranshahi.zoochallenge.data.model.Room;
 import org.iranshahi.zoochallenge.data.repository.RoomRepository;
 import org.iranshahi.zoochallenge.exceptions.DuplicateRoomTitleException;
@@ -11,31 +12,45 @@ import org.iranshahi.zoochallenge.exceptions.RoomNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit tests for {@link RoomServiceImpl}, verifying CRUD and validation logic.
+ *
+ * @author Reza
+ * @since 10 Oct 2025
+ */
 public class RoomServiceTest {
 
     private RoomManagementService roomService;
     private RoomRepository roomRepository;
-    private RoomMapper roomMapper;
 
     @BeforeEach
     void setUp() {
         roomRepository = mock(RoomRepository.class);
-        roomMapper = new RoomMapper();
+        RoomMapper roomMapper = new RoomMapper();
         roomService = new RoomServiceImpl(roomRepository, roomMapper);
     }
 
-
     @Test
     void create_a_room() {
-        //Arrangement
+        // Arrange
         var roomTitle = "Green";
-        var roomDTO = new RoomDto(null, roomTitle);
+        var dto = new RoomDto(
+                null,
+                roomTitle,
+                30.0,
+                0.0,
+                new HashSet<>(),
+                Category.WILD,
+                null
+        );
 
         when(roomRepository.save(any()))
                 .thenAnswer(inv -> {
@@ -44,64 +59,125 @@ public class RoomServiceTest {
                     room.setTitle(roomTitle);
                     return room;
                 });
-        //MUT
-        var createdRoom = roomService.create(roomDTO);
 
-        //Assertion
+        // Act
+        var createdRoom = roomService.create(dto);
+
+        // Assert
         assertNotNull(createdRoom.id());
         assertEquals(roomTitle, createdRoom.title());
+        verify(roomRepository, times(1)).save(any(Room.class));
     }
 
     @Test
     void create_a_room_with_existing_title() {
-        //Arrangement
+        // Arrange
         var roomTitle = "Green";
-        var roomDTO = new RoomDto(null, roomTitle);
-        when(roomRepository.existsByTitle(roomTitle)).thenReturn(Boolean.TRUE);
+        var dto = new RoomDto(
+                null,
+                roomTitle,
+                30.0,
+                0.0,
+                new HashSet<>(),
+                Category.WILD,
+                null
+        );
 
-        //MUT & Assertion
+        when(roomRepository.existsByTitle(roomTitle)).thenReturn(true);
+
+        // Assert
         assertThrows(DuplicateRoomTitleException.class,
-                () -> roomService.create(roomDTO));
+                () -> roomService.create(dto)
+        );
+        verify(roomRepository, never()).save(any());
     }
 
     @Test
     void update_an_existing_room() {
-        var newRoomTitle = "Red";
-        var existing = Room.builder().id("room1").title("Green").build();
+        // Arrange
+        var newTitle = "Red";
+        var existing = Room.builder()
+                .id("room1")
+                .title("Green")
+                .capacity(20.0)
+                .allowedCategory(Category.WILD)
+                .build();
+
         when(roomRepository.findById("room1")).thenReturn(Optional.of(existing));
         when(roomRepository.save(any())).thenAnswer(inv -> inv.getArgument(0));
 
-        var updatedDTO = roomMapper.toDto(Room.builder().id("room1").title(newRoomTitle).build());
-        var result = roomService.update("room1", updatedDTO);
+        var updatedDto = new RoomDto(
+                "room1",
+                newTitle,
+                20.0,
+                0.0,
+                new HashSet<>(),
+                Category.WILD,
+                1L
+        );
 
-        assertEquals(newRoomTitle, result.title());
+        // Act
+        var result = roomService.update("room1", updatedDto);
+
+        // Assert
+        assertEquals(newTitle, result.title());
         verify(roomRepository, times(1)).save(any(Room.class));
     }
 
     @Test
     void update_a_room_with_existing_title() {
-        var roomDTO = new RoomDto(null, "Red");
-        var existing = Room.builder().id("room1").title("Green").build();
-        when(roomRepository.findById("room1")).thenReturn(Optional.of(existing));
-        when(roomRepository.existsByTitle("Red")).thenReturn(Boolean.TRUE);
-
-        assertThrows(DuplicateRoomTitleException.class, () ->
-                roomService.update("room1", roomDTO)
+        // Arrange
+        var dto = new RoomDto(
+                null,
+                "Red",
+                30.0,
+                0.0,
+                new HashSet<>(),
+                Category.DOMESTIC,
+                null
         );
+
+        var existing = Room.builder()
+                .id("room1")
+                .title("Green")
+                .allowedCategory(Category.WILD)
+                .build();
+
+        when(roomRepository.findById("room1")).thenReturn(Optional.of(existing));
+        when(roomRepository.existsByTitle("Red")).thenReturn(true);
+
+        // Assert
+        assertThrows(DuplicateRoomTitleException.class,
+                () -> roomService.update("room1", dto)
+        );
+        verify(roomRepository, never()).save(any());
     }
 
     @Test
     void update_not_existing_room() {
+        // Arrange
         when(roomRepository.findById("r99")).thenReturn(Optional.empty());
-        assertThrows(RoomNotFoundException.class, () -> roomService.update("r99", new RoomDto(null, null)));
+        var dto = new RoomDto(
+                null,
+                "Green",
+                30.0,
+                0.0,
+                new HashSet<>(),
+                Category.WILD,
+                null
+        );
+
+        // Assert
+        assertThrows(RoomNotFoundException.class,
+                () -> roomService.update("r99", dto)
+        );
+        verify(roomRepository, never()).save(any());
     }
 
     @Test
-    void delete_room_invokesRepo() {
+    void delete_room_invokes_repository() {
         doNothing().when(roomRepository).deleteById("room1");
         roomService.delete("room1");
         verify(roomRepository, times(1)).deleteById("room1");
     }
-
-
 }
